@@ -58,6 +58,7 @@ spinner $!
 cd ~/Tools
 wget https://github.com/epi052/feroxbuster/releases/download/v2.10.4/x86_64-linux-feroxbuster.tar.gz
 tar -xf x86_64-linux-feroxbuster.tar.gz
+chmod +x feroxbuster
 sudo cp feroxbuster /usr/bin
 
 # Install httpx
