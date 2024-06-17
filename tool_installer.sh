@@ -28,6 +28,14 @@ rotating_line() {
     done
     printf "    \b\b\b\b"
 }
+#installing gf tool
+go install github.com/tomnomnom/gf@latest
+mkdir ~/.gf
+cd ~/Tools
+git clone https://github.com/Sherlock297/gf_patterns.git
+cd gf_patterns
+cp *.json ~/.gf
+spinner $!
 
 #installing nuclie
 go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
@@ -35,7 +43,7 @@ go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 # Install waybackurls
 echo "Installing waybackurls..."
 go install github.com/tomnomnom/waybackurls@latest
-
+spinner $!
 # Install subfinder
 echo "Installing subfinder..."
 go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest &
@@ -83,7 +91,7 @@ rotating_line $!
 
 # Copy tools to /usr/bin
 echo "Copying tools to /usr/bin..."
-sudo cp ~/go/bin/{subfinder,httpx,dnsx,assetfinder,dalfox,waybackurls,nuclei,ffuf} /usr/bin/
+sudo cp ~/go/bin/{subfinder,httpx,dnsx,assetfinder,dalfox,waybackurls,nuclei,ffuf,gf} /usr/bin/
 spinner $!
 
 # Clone XSStrike
