@@ -107,7 +107,6 @@ cd ..
 echo "Downloading SecLists..."
 wget -c https://github.com/danielmiessler/SecLists/archive/master.zip -O secLists.zip &
 spinner $!
-
 unzip SecLists-master
 rm -rf secLists.zip
 mv SecLists-master seclists
