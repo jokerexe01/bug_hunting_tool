@@ -7,14 +7,13 @@ check_requirments_and_install(){
     sudo apt install -y libpcap-dev
         # Check if the 'lolcat' command is available
     if ! command -v lolcat &> /dev/null; then
-        echo "lolcat is not installed. Installing lolcat..."
-        sudo apt install -y lolcat
+        echo "lolcat is not installed. Installing lolcat..." | lolcat
     else
-        echo "lolcat is installed."
-        lolcat --version
+        echo "lolcat is installed." | lolcat
+        lolcat --version | lolcat
     fi
     # Check if the 'go' command is available
-    # export PATH=$PATH:/usr/local/go/bin
+    export PATH=$PATH:/usr/local/go/bin
     if command -v go &> /dev/null
     then
         echo "Go is installed" | lolcat
@@ -74,18 +73,19 @@ check_kali_or_ubuntu(){
         if [ -f /etc/os-release ]; then
         . /etc/os-release
         if [ "$ID" = "kali" ]; then
-            echo "The system is running Kali Linux."
+            echo "The system is running Kali Linux." | lolcat
             #calling kali Linux for tool installetion 
             Tool_for_kali_linux
         elif [ "$ID" = "ubuntu" ]; then
-            echo "The system is running Ubuntu."
+            echo "The system is running Ubuntu." | lolcat
             #calling ubuntu for tool installetion
             Tool_for_ubuntu
         else
-            echo -e "The system is not running Kali or Ubuntu. It is running $ID."
+            echo -e "The system is not running Kali or Ubuntu. It is running $ID." | lolcat
+            Tool_for_ubuntu
         fi
     else
-        echo "Cannot determine the operating system."
+        echo "Cannot determine the operating system." | lolcat
     fi
 }
 
@@ -93,28 +93,32 @@ check_kali_or_ubuntu(){
 
 #function for tool installetion in kali 
 Tool_for_kali_linux(){
-    sudo apt update
-    sudo apt upgrade
 
     #checking is feroxbuster is installed or not
     if ! command -v feroxbuster &> /dev/null; then
-        echo "feroxbuster is not installed. Installing feroxbuster..." 
-        sudo apt install -y feroxbuster
+        echo "feroxbuster is not installed. Installing feroxbuster..." | lolcat
+        cd ~/Tools
+        wget https://github.com/epi052/feroxbuster/releases/download/v2.10.4/x86_64-linux-feroxbuster.tar.gz
+        tar -xf x86_64-linux-feroxbuster.tar.gz
+        chmod +x feroxbuster
+        sudo cp feroxbuster /bin
+        cd ~/Tools
+        rm -rf feroxbuster  x86_64-linux-feroxbuster.tar.gz
     else
-        echo "feroxbuster is already installed..."
+        echo "feroxbuster is already installed..." | lolcat
     fi
 
     #checking if XSSstrike is downloaded or not 
     xsstrike_DIR="$HOME/Tools/XSStrike"
     if [ -d "$xsstrike_DIR" ]; then
-        echo "Xsstrike is already installed path is ~/Tools/XSStrike." 
+        echo "Xsstrike is already installed path is ~/Tools/XSStrike." | lolcat
     else
         echo "XSStrike not installed. Now installing XSStrike...."
         cd Tools;git clone https://github.com/s0md3v/XSStrike.git
         cd XSStrike
         pip3 install -r requirements.txt
         chmod +x xsstrike.py
-        echo "XSStrike is now installed in ~/Tools"
+        echo "XSStrike is now installed in ~/Tools" | lolcat
     fi
     
     #checking if sqlmap installed or not 
@@ -208,36 +212,44 @@ Tool_for_ubuntu(){
     sudo apt update
     sudo apt upgrade
 
-    #checking is feroxbuster is installed or not
+    #feroxbuster
     if ! command -v feroxbuster &> /dev/null; then
-        echo "feroxbuster is not installed. Installing feroxbuster..." 
-        sudo apt install -y feroxbuster
+        echo "feroxbuster is not installed. Installing feroxbuster..." | lolcat
+        cd ~/Tools
+        wget https://github.com/epi052/feroxbuster/releases/download/v2.10.4/x86_64-linux-feroxbuster.tar.gz
+        tar -xf x86_64-linux-feroxbuster.tar.gz
+        chmod +x feroxbuster
+        sudo cp feroxbuster /bin
+        cd ~/Tools
+        rm -rf feroxbuster  x86_64-linux-feroxbuster.tar.gz
     else
-        echo "feroxbuster is already installed..."
+        echo "feroxbuster is already installed..." | lolcat
     fi
 
-    #checking if XSSstrike is downloaded or not 
+    #XSSstrike 
     xsstrike_DIR="$HOME/Tools/XSStrike"
     if [ -d "$xsstrike_DIR" ]; then
         echo "Xsstrike is already installed path is ~/Tools/XSStrike." 
     else
-        echo "XSStrike not installed. Now installing XSStrike...."
+        echo "XSStrike not installed. Now installing XSStrike...." | lolcat
         cd Tools;git clone https://github.com/s0md3v/XSStrike.git
         cd XSStrike
         pip3 install -r requirements.txt
         chmod +x xsstrike.py
-        echo "XSStrike is now installed in ~/Tools"
+        echo "XSStrike is now installed in ~/Tools" | lolcat
     fi
 
-    #checking if sqlmap installed or not 
-    if ! command -v sqlmap &> /dev/null; then
-        echo "sqlmap is not there. Now installng sqlmap..." | lolcat
-        sudo apt install sqlmap
+    #sqlmap 
+    sqlmap_DIR="$HOME/Tools/sqlmap"
+    if [ -d "$TOOLS_DIR" ]; then
+        echo "sqlmap is already installed path is ~/Tools/sqlmap" | lolcat
     else
-        echo "sqlmap is already installed..." | lolcat
+        echo "now installing sqlmap...." | lolcat
+        cd ~/Tools
+        git clone https://github.com/sqlmapproject/sqlmap.git
     fi
 
-    #checking if ghauri is installed or not
+    #ghauri
     if ! command -v ghauri &> /dev/null; then
         echo "ghauri is not installed. Now installing ghauri...." | lolcat
         cd ~/Tools
@@ -277,7 +289,7 @@ Tool_for_ubuntu(){
 
     #checking if creepy crawler installed or not 
     ccreepyCrawler_DIR=$HOME/Tools/creepyCrawler
-    if [ -d "$ccreepyCrawler" ]; then
+    if [ -d "$ccreepyCrawler_DIR" ]; then
         echo "creepyCrawler already exist" | lolcat
     else
         echo "Now installing creepyCrawler..." | lolcat
@@ -359,14 +371,14 @@ copy_tools_bin(){
     
     # Check if the source directory exists
     if [ -d "$SOURCE_DIR" ]; then
-        echo "Source directory $SOURCE_DIR exists."
+        echo "Source directory $SOURCE_DIR exists." | lolcat
         
         # Copy all files from source to destination
         echo "Copying all files from $SOURCE_DIR to $DEST_DIR..."
         sudo cp "$SOURCE_DIR"/* "$DEST_DIR/"
-        echo "Copying completed."
+        echo "Copying completed." | lolcat 
     else
-        echo "Source directory $SOURCE_DIR does not exist. Please ensure Go binaries are installed."
+        echo "Source directory $SOURCE_DIR does not exist. Please ensure Go binaries are installed." | lolcat
     fi
 }
 
