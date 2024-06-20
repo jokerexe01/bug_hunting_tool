@@ -320,6 +320,29 @@ Tool_for_ubuntu(){
         pip install -r requirements.txt
         chmdo +x ssrfmap.py
     fi
+    
+    #seclists
+    seclist_DIR=/usr/share/seclists
+    if [ -d "$seclist_DIR" ]; then
+        echo "seclist is already installed path is /usr/share/seclists" | lolcat
+    else
+        echo "Now Installing seclists...." | lolcat
+        cd ~/Tools
+        git clone https://github.com/danielmiessler/SecLists.git
+        mv SecLists seclists
+        sudo cp -r seclists /usr/share
+        rm -rf seclists
+    fi
+
+    #metasploit
+    if ! command -v msfvenom &> /dev/null; then
+        echo "Now installing metasploit...." | lolcat
+        cd ~/Tools
+        curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall
+    else
+        echo metasploit is already installed
+    fi
+
 
 # calling go tool for installetion
 install_go_tools
